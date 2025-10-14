@@ -38,7 +38,7 @@ function App() {
 
   return (
     <div>
-      <h1>Magic Items</h1>
+      <h1>Items</h1>
       {items.map((item, idx) => (
         <ItemBlock
           key={idx}
