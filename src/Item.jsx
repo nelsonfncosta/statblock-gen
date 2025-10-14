@@ -1,3 +1,17 @@
+// Utility to select all content in contenteditable
+function selectAllContent(ref) {
+  const el = ref.current;
+  if (el) {
+    const range = document.createRange();
+    range.selectNodeContents(el);
+    range.collapse(false);
+    range.setStart(el, 0);
+    range.setEnd(el, el.childNodes.length);
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+  }
+}
 import React, { useState } from "react";
 import "./Item.css";
 
@@ -8,7 +22,6 @@ function ItemBlock({ item, onChange }) {
   const [nameInput, setNameInput] = useState(item.name || "");
   const [descInput, setDescInput] = useState(item.description || "");
   const [addingField, setAddingField] = useState(null); // 'bonus', 'benefit', 'curse', 'personality'
-  const [fieldInput, setFieldInput] = useState("");
   // Inline editing for bonus, benefit, curse, personality
   const [editingBonus, setEditingBonus] = useState(false);
   const [editingBenefit, setEditingBenefit] = useState(false);
@@ -20,22 +33,50 @@ function ItemBlock({ item, onChange }) {
   const [personalityInput, setPersonalityInput] = useState(
     item.personality || ""
   );
+  // Refs for focusing contenteditable fields
+  const bonusRef = React.useRef(null);
+  const benefitRef = React.useRef(null);
+  const curseRef = React.useRef(null);
+  const personalityRef = React.useRef(null);
+
+  const fieldConfig = {
+    bonus: {
+      setInput: setBonusInput,
+      setEditing: setEditingBonus,
+      ref: bonusRef,
+    },
+    benefit: {
+      setInput: setBenefitInput,
+      setEditing: setEditingBenefit,
+      ref: benefitRef,
+    },
+    curse: {
+      setInput: setCurseInput,
+      setEditing: setEditingCurse,
+      ref: curseRef,
+    },
+    personality: {
+      setInput: setPersonalityInput,
+      setEditing: setEditingPersonality,
+      ref: personalityRef,
+    },
+  };
 
   const handleAddField = (field) => {
-    setAddingField(field);
-    setFieldInput("");
-  };
-
-  const handleFieldInputChange = (e) => {
-    setFieldInput(e.target.value);
-  };
-
-  const handleFieldInputSave = () => {
-    if (fieldInput.trim() && onChange) {
-      onChange({ ...item, [addingField]: fieldInput });
+    if (onChange) {
+      onChange({ ...item, [field]: "enter text here" });
     }
-    setAddingField(null);
-    setFieldInput("");
+    const config = fieldConfig[field];
+    if (config) {
+      config.setInput("enter text here");
+      config.setEditing(true);
+      setTimeout(() => {
+        if (config.ref.current) {
+          config.ref.current.focus();
+          selectAllContent(config.ref);
+        }
+      }, 0);
+    }
   };
 
   // Save edits if mouse leaves while editing
@@ -91,28 +132,25 @@ function ItemBlock({ item, onChange }) {
         onMouseLeave={handleCardMouseLeave}
       >
         <div className="item-card-header">
-          {editingName ? (
-            <input
-              className="item-card-name"
-              value={nameInput}
-              onChange={(e) => setNameInput(e.target.value)}
-              onBlur={() => {
-                setEditingName(false);
-                if (nameInput !== item.name && onChange) {
-                  onChange({ ...item, name: nameInput });
-                }
-              }}
-              autoFocus
-            />
-          ) : (
-            <span
-              className="item-card-name"
-              style={{ cursor: "pointer" }}
-              onClick={() => setEditingName(true)}
-            >
-              {item.name || <span style={{ color: "#888" }}>Item Name</span>}
-            </span>
-          )}
+          <span
+            className="item-card-name"
+            style={{ cursor: "pointer" }}
+            contentEditable
+            suppressContentEditableWarning
+            onBlur={(e) => {
+              setEditingName(false);
+              const newValue = e.target.innerText;
+              setNameInput(newValue);
+              if (newValue !== item.name && onChange) {
+                onChange({ ...item, name: newValue });
+              }
+            }}
+            // onInput removed to prevent cursor jump
+            onFocus={() => setEditingName(true)}
+            tabIndex={0}
+          >
+            {nameInput || <span style={{ color: "#888" }}>Item Name</span>}
+          </span>
         </div>
         <div
           className={`item-card-body${
@@ -120,135 +158,123 @@ function ItemBlock({ item, onChange }) {
           }`}
           style={{ position: "relative" }}
         >
-          {editingDesc ? (
-            <textarea
-              className="item-card-description"
-              value={descInput}
-              onChange={(e) => setDescInput(e.target.value)}
-              onBlur={() => {
-                setEditingDesc(false);
-                if (descInput !== item.description && onChange) {
-                  onChange({ ...item, description: descInput });
-                }
-              }}
-              autoFocus
-              rows={2}
-            />
-          ) : (
-            <span
-              className="item-card-description"
-              style={{ cursor: "pointer", display: "block" }}
-              onClick={() => setEditingDesc(true)}
-            >
-              {item.description || (
-                <span style={{ color: "#888", fontStyle: "italic" }}>
-                  Item description goes here.
-                </span>
-              )}
-            </span>
-          )}
+          <span
+            className="item-card-description"
+            style={{ cursor: "pointer", display: "block" }}
+            contentEditable
+            suppressContentEditableWarning
+            onBlur={(e) => {
+              setEditingDesc(false);
+              const newValue = e.target.innerText;
+              setDescInput(newValue);
+              if (newValue !== item.description && onChange) {
+                onChange({ ...item, description: newValue });
+              }
+            }}
+            // onInput removed to prevent cursor jump
+            onFocus={() => setEditingDesc(true)}
+            tabIndex={0}
+          >
+            {descInput || (
+              <span style={{ color: "#888", fontStyle: "italic" }}>
+                Item description goes here.
+              </span>
+            )}
+          </span>
           {item.bonus && (
             <div className="item-card-section">
               <span className="item-card-section-title">Bonus.</span>
-              {editingBonus ? (
-                <input
-                  className="item-card-section-input"
-                  value={bonusInput}
-                  onChange={(e) => setBonusInput(e.target.value)}
-                  onBlur={() => {
-                    setEditingBonus(false);
-                    if (bonusInput !== item.bonus && onChange) {
-                      onChange({ ...item, bonus: bonusInput });
-                    }
-                  }}
-                  autoFocus
-                />
-              ) : (
-                <span
-                  style={{ cursor: "pointer" }}
-                  onClick={() => setEditingBonus(true)}
-                >
-                  {item.bonus}
-                </span>
-              )}
+              <span
+                className="item-card-section-input"
+                style={{ cursor: "pointer" }}
+                contentEditable
+                suppressContentEditableWarning
+                ref={bonusRef}
+                onBlur={(e) => {
+                  setEditingBonus(false);
+                  const newValue = e.target.innerText;
+                  setBonusInput(newValue);
+                  if (newValue !== item.bonus && onChange) {
+                    onChange({ ...item, bonus: newValue });
+                  }
+                }}
+                onFocus={() => setEditingBonus(true)}
+                tabIndex={0}
+              >
+                {bonusInput}
+              </span>
             </div>
           )}
           {item.benefit && (
             <div className="item-card-section">
               <span className="item-card-section-title">Benefit.</span>
-              {editingBenefit ? (
-                <input
-                  className="item-card-section-input"
-                  value={benefitInput}
-                  onChange={(e) => setBenefitInput(e.target.value)}
-                  onBlur={() => {
-                    setEditingBenefit(false);
-                    if (benefitInput !== item.benefit && onChange) {
-                      onChange({ ...item, benefit: benefitInput });
-                    }
-                  }}
-                  autoFocus
-                />
-              ) : (
-                <span
-                  style={{ cursor: "pointer" }}
-                  onClick={() => setEditingBenefit(true)}
-                >
-                  {item.benefit}
-                </span>
-              )}
+              <span
+                className="item-card-section-input"
+                style={{ cursor: "pointer" }}
+                contentEditable
+                suppressContentEditableWarning
+                ref={benefitRef}
+                onBlur={(e) => {
+                  setEditingBenefit(false);
+                  const newValue = e.target.innerText;
+                  setBenefitInput(newValue);
+                  if (newValue !== item.benefit && onChange) {
+                    onChange({ ...item, benefit: newValue });
+                  }
+                }}
+                onFocus={() => setEditingBenefit(true)}
+                tabIndex={0}
+              >
+                {benefitInput}
+              </span>
             </div>
           )}
           {item.curse && (
             <div className="item-card-section">
               <span className="item-card-section-title">Curse.</span>
-              {editingCurse ? (
-                <input
-                  className="item-card-section-input"
-                  value={curseInput}
-                  onChange={(e) => setCurseInput(e.target.value)}
-                  onBlur={() => {
-                    setEditingCurse(false);
-                    if (curseInput !== item.curse && onChange) {
-                      onChange({ ...item, curse: curseInput });
-                    }
-                  }}
-                  autoFocus
-                />
-              ) : (
-                <span
-                  style={{ cursor: "pointer" }}
-                  onClick={() => setEditingCurse(true)}
-                >
-                  {item.curse}
-                </span>
-              )}
+              <span
+                className="item-card-section-input"
+                style={{ cursor: "pointer" }}
+                contentEditable
+                suppressContentEditableWarning
+                ref={curseRef}
+                onBlur={(e) => {
+                  setEditingCurse(false);
+                  const newValue = e.target.innerText;
+                  setCurseInput(newValue);
+                  if (newValue !== item.curse && onChange) {
+                    onChange({ ...item, curse: newValue });
+                  }
+                }}
+                onFocus={() => setEditingCurse(true)}
+                tabIndex={0}
+              >
+                {curseInput}
+              </span>
             </div>
           )}
           {item.personality && (
             <div className="item-card-section">
               <span className="item-card-section-title">Personality.</span>
-              {editingPersonality ? (
-                <input
-                  className="item-card-section-input"
-                  value={personalityInput}
-                  onChange={(e) => setPersonalityInput(e.target.value)}
-                  onBlur={() => {
-                    setEditingPersonality(false);
-                    if (personalityInput !== item.personality && onChange) {
-                      onChange({ ...item, personality: personalityInput });
-                    }
-                  }}
-                  autoFocus
-                />
-              ) : (
-                <span
-                  style={{ cursor: "pointer" }}
-                  onClick={() => setEditingPersonality(true)}
-                >
-                  {item.personality}
-                </span>
-              )}
+              <span
+                className="item-card-section-input"
+                style={{ cursor: "pointer" }}
+                contentEditable
+                suppressContentEditableWarning
+                ref={personalityRef}
+                onBlur={(e) => {
+                  setEditingPersonality(false);
+                  const newValue = e.target.innerText;
+                  setPersonalityInput(newValue);
+                  if (newValue !== item.personality && onChange) {
+                    onChange({ ...item, personality: newValue });
+                  }
+                }}
+                onFocus={() => setEditingPersonality(true)}
+                tabIndex={0}
+              >
+                {personalityInput}
+              </span>
             </div>
           )}
           {canAddMoreFields && (
@@ -324,32 +350,6 @@ function ItemBlock({ item, onChange }) {
                   )}
                 </div>
               </div>
-              {addingField && (
-                <div
-                  className="item-card-add-input"
-                  style={{ marginTop: "12px", textAlign: "center" }}
-                >
-                  <input
-                    type="text"
-                    value={fieldInput}
-                    onChange={handleFieldInputChange}
-                    placeholder={`Enter ${addingField}...`}
-                    style={{ width: "80%", padding: "6px", fontSize: "1em" }}
-                  />
-                  <button
-                    onClick={handleFieldInputSave}
-                    style={{
-                      marginLeft: "8px",
-                      marginTop: "8px",
-                      padding: "6px 16px",
-                      fontWeight: "bold",
-                      cursor: "pointer",
-                    }}
-                  >
-                    Save
-                  </button>
-                </div>
-              )}
             </div>
           )}
         </div>

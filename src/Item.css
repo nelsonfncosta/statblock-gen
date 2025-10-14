@@ -2,14 +2,12 @@
   max-height: 0;
   opacity: 0;
   overflow: hidden;
-  transform: translateY(-10px);
-  transition: max-height 0.5s cubic-bezier(.4,0,.2,1), opacity 0.35s, transform 0.5s cubic-bezier(.4,0,.2,1);
-  will-change: max-height, opacity, transform;
+  transition: max-height 0.5s ease-in-out, opacity 0.35s ease-in-out;
+  will-change: max-height, opacity;
 }
 .item-card-body-expanded .item-card-add-field {
   max-height: 300px;
   opacity: 1;
-  transform: translateY(0);
   overflow: visible;
 }
 /* Prettier Plus Button */
@@ -37,7 +35,7 @@
   max-width: 340px;
   margin: 24px auto;
   padding: 0 20px 14px 20px;
-  font-family: 'Georgia', 'Times New Roman', serif;
+  font-family: "Georgia", "Times New Roman", serif;
   color: #000;
 }
 .item-card-header {
