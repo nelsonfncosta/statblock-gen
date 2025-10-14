@@ -1,6 +1,6 @@
 import "./App.css";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ItemBlock from "./Item";
 import markdownIcon from "./assets/markdown.svg";
 
@@ -25,8 +25,24 @@ const emptyItem = {
   personality: "",
 };
 
+const LS_ITEMS_KEY = "statblock-gen-items";
+
 function App() {
-  const [items, setItems] = useState([DemoItem, emptyItem]);
+  const [items, setItems] = useState(() => {
+    const saved = localStorage.getItem(LS_ITEMS_KEY);
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch {
+        return [DemoItem, emptyItem];
+      }
+    }
+    return [DemoItem, emptyItem];
+  });
+
+  useEffect(() => {
+    localStorage.setItem(LS_ITEMS_KEY, JSON.stringify(items));
+  }, [items]);
 
   const handleItemChange = (idx, newItem) => {
     setItems((items) => items.map((item, i) => (i === idx ? newItem : item)));
