@@ -1,0 +1,49 @@
+/* Shadowdark Item Card Styles */
+.item-card {
+  background: #fff;
+  border: 2px solid #000;
+  border-radius: 8px;
+  max-width: 340px;
+  margin: 24px auto;
+  padding: 0 20px 14px 20px;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  color: #000;
+}
+.item-card-header {
+  background: #000;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  padding: 12px 20px 8px 20px;
+  margin: 0 -20px 10px -20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.item-card-name {
+  font-size: 1.3rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #fff;
+  text-align: center;
+  width: 100%;
+}
+.item-card-body {
+  font-size: 1rem;
+  text-align: left;
+}
+.item-card-body {
+  font-size: 1rem;
+}
+.item-card-description {
+  margin-bottom: 10px;
+  font-style: italic;
+}
+.item-card-section {
+  margin-bottom: 6px;
+}
+.item-card-section-title {
+  font-weight: bold;
+  color: #000;
+  margin-right: 4px;
+}
