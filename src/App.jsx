@@ -27,6 +27,17 @@ const emptyItem = {
 
 const LS_ITEMS_KEY = "statblock-gen-items";
 
+// Markdown generator for item
+const itemToMarkdown = (item) => {
+  let md = `### ${item.name || "Item Name"}\n`;
+  if (item.description) md += `${item.description}\n`;
+  if (item.bonus) md += `**Bonus:** ${item.bonus}\n`;
+  if (item.benefit) md += `**Benefit:** ${item.benefit}\n`;
+  if (item.curse) md += `**Curse:** ${item.curse}\n`;
+  if (item.personality) md += `**Personality:** ${item.personality}\n`;
+  return md;
+};
+
 function App() {
   const [items, setItems] = useState(() => {
     const saved = localStorage.getItem(LS_ITEMS_KEY);
@@ -52,17 +63,6 @@ function App() {
     setItems((items) => [...items, emptyItem]);
   };
 
-  // Markdown generator for item
-  const itemToMarkdown = (item) => {
-    let md = `### ${item.name || "Item Name"}\n`;
-    if (item.description) md += `${item.description}\n`;
-    if (item.bonus) md += `**Bonus:** ${item.bonus}\n`;
-    if (item.benefit) md += `**Benefit:** ${item.benefit}\n`;
-    if (item.curse) md += `**Curse:** ${item.curse}\n`;
-    if (item.personality) md += `**Personality:** ${item.personality}\n`;
-    return md;
-  };
-
   const handleCopyMarkdown = (idx) => {
     const md = itemToMarkdown(items[idx]);
     navigator.clipboard.writeText(md);
@@ -84,18 +84,7 @@ function App() {
           />
           <button
             onClick={() => handleCopyMarkdown(idx)}
-            style={{
-              position: "absolute",
-              top: "10px",
-              right: "-38px",
-              zIndex: 2,
-              padding: "4px 10px",
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
-              borderRadius: "50%",
-            }}
+            className="copy-markdown-btn"
             title="Copy as Markdown"
           >
             <img
