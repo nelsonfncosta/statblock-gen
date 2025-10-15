@@ -1,3 +1,13 @@
+/* Opt field add option styles */
+.opt-field-option {
+  margin-right: 8px;
+  cursor: pointer;
+  transition: font-weight 0.2s;
+}
+.opt-field-option:hover {
+  font-weight: bold;
+}
+
 .item-card-add-field {
   max-height: 0;
   opacity: 0;

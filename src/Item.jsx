@@ -306,11 +306,7 @@ function ItemBlock({ item, onChange }) {
                 >
                   {!item.bonus && (
                     <span
-                      style={{
-                        marginRight: "8px",
-                        cursor: "pointer",
-                        fontWeight: "bold",
-                      }}
+                      className="opt-field-option"
                       onClick={() => handleAddField("bonus")}
                     >
                       Bonus
@@ -318,11 +314,7 @@ function ItemBlock({ item, onChange }) {
                   )}
                   {!item.benefit && (
                     <span
-                      style={{
-                        marginRight: "8px",
-                        cursor: "pointer",
-                        fontWeight: "bold",
-                      }}
+                      className="opt-field-option"
                       onClick={() => handleAddField("benefit")}
                     >
                       Benefit
@@ -330,11 +322,7 @@ function ItemBlock({ item, onChange }) {
                   )}
                   {!item.curse && (
                     <span
-                      style={{
-                        marginRight: "8px",
-                        cursor: "pointer",
-                        fontWeight: "bold",
-                      }}
+                      className="opt-field-option"
                       onClick={() => handleAddField("curse")}
                     >
                       Curse
@@ -342,7 +330,7 @@ function ItemBlock({ item, onChange }) {
                   )}
                   {!item.personality && (
                     <span
-                      style={{ cursor: "pointer", fontWeight: "bold" }}
+                      className="opt-field-option"
                       onClick={() => handleAddField("personality")}
                     >
                       Personality

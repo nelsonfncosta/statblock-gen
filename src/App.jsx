@@ -64,7 +64,8 @@ function App() {
   };
 
   const handleRemoveItem = (idx) => {
-    setItems((items) => items.filter((_, i) => i !== idx));
+    const updatedItems = items.filter((_, i) => i !== idx);
+    setItems(updatedItems);
   };
 
   const handleCopyMarkdown = (idx) => {
@@ -76,7 +77,7 @@ function App() {
     <div>
       <h1>Items</h1>
       {items.map((item, idx) => (
-        <div key={idx} style={{ position: "relative" }}>
+        <div key={`item-${item.name}-${idx}`} style={{ position: "relative" }}>
           <ItemBlock
             item={item}
             onChange={(newItem) => handleItemChange(idx, newItem)}
