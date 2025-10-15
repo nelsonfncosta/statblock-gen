@@ -63,6 +63,10 @@ function App() {
     setItems((items) => [...items, emptyItem]);
   };
 
+  const handleRemoveItem = (idx) => {
+    setItems((items) => items.filter((_, i) => i !== idx));
+  };
+
   const handleCopyMarkdown = (idx) => {
     const md = itemToMarkdown(items[idx]);
     navigator.clipboard.writeText(md);
@@ -72,12 +76,7 @@ function App() {
     <div>
       <h1>Items</h1>
       {items.map((item, idx) => (
-        <div
-          key={idx}
-          style={{
-            position: "relative",
-          }}
-        >
+        <div key={idx} style={{ position: "relative" }}>
           <ItemBlock
             item={item}
             onChange={(newItem) => handleItemChange(idx, newItem)}
@@ -96,6 +95,13 @@ function App() {
                 filter: "invert(1) brightness(2)",
               }}
             />
+          </button>
+          <button
+            onClick={() => handleRemoveItem(idx)}
+            className="remove-item-btn"
+            title="Remove Item"
+          >
+            &times;
           </button>
         </div>
       ))}
