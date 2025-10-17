@@ -28,14 +28,22 @@ const emptyItem = {
 const LS_ITEMS_KEY = "statblock-gen-items";
 
 // Markdown generator for item
+function wrapText(text, width = 60) {
+  if (!text) return "";
+  return text
+    .replace(new RegExp(`(.{1,${width}})(\\s+|$)`, "g"), "$1\n")
+    .trim();
+}
+
 const itemToMarkdown = (item) => {
-  let md = `### ${item.name || "Item Name"}\n`;
-  if (item.description) md += `${item.description}\n`;
-  if (item.bonus) md += `**Bonus:** ${item.bonus}\n`;
-  if (item.benefit) md += `**Benefit:** ${item.benefit}\n`;
-  if (item.curse) md += `**Curse:** ${item.curse}\n`;
-  if (item.personality) md += `**Personality:** ${item.personality}\n`;
-  return md;
+  let md = `### ${wrapText(item.name || "Item Name")}`;
+  if (item.description) md += `\n${wrapText(item.description)}`;
+  if (item.bonus) md += `\n**Bonus:** ${wrapText(item.bonus)}`;
+  if (item.benefit) md += `\n**Benefit:** ${wrapText(item.benefit)}`;
+  if (item.curse) md += `\n**Curse:** ${wrapText(item.curse)}`;
+  if (item.personality)
+    md += `\n**Personality:** ${wrapText(item.personality)}`;
+  return md.trim() + "\n";
 };
 
 function App() {
