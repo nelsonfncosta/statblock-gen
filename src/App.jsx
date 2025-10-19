@@ -2,6 +2,7 @@ import "./App.css";
 
 import { useState, useEffect } from "react";
 import ItemBlock from "./Item";
+import CreatureBlock from "./Creature";
 import markdownIcon from "./assets/markdown.svg";
 
 const DemoItem = {
@@ -25,7 +26,41 @@ const emptyItem = {
   personality: "",
 };
 
+const DemoNPC = {
+  name: "Goblin Scout",
+  description:
+    "A small, green-skinned humanoid with sharp features and a mischievous grin.",
+  armorClass: "15 (leather)",
+  hitPoints: "27",
+  attack: "1 spear (close/near) +3 (1d6)",
+  movement: "near (climb)",
+  S: "-1",
+  D: "+2",
+  C: "+0",
+  I: "+0",
+  W: "-1",
+  Ch: "-1",
+  AL: "C",
+  LV: "1",
+};
+
+const emptyCreature = {
+  name: "",
+  description: "",
+  armorClass: "",
+  hitPoints: "",
+  attack: "",
+  movement: "",
+  S: "",
+  D: "",
+  C: "",
+  I: "",
+  W: "",
+  Ch: "",
+};
+
 const LS_ITEMS_KEY = "statblock-gen-items";
+const LS_CREATURES_KEY = "statblock-gen-creatures";
 
 // Markdown generator for item
 function wrapText(text, width = 60) {
@@ -46,6 +81,23 @@ const itemToMarkdown = (item) => {
   return md.trim() + "\n";
 };
 
+const creatureToMarkdown = (creature) => {
+  let md = `### ${wrapText(creature.name || "Creature Name")}`;
+  if (creature.description) md += `\n${wrapText(creature.description)}`;
+  if (creature.armorClass)
+    md += `\n**Armor Class:** ${wrapText(creature.armorClass)}`;
+  if (creature.hitPoints)
+    md += `\n**Hit Points:** ${wrapText(creature.hitPoints)}`;
+  if (creature.attack) md += `\n**Attack:** ${wrapText(creature.attack)}`;
+  if (creature.movement) md += `\n**Movement:** ${wrapText(creature.movement)}`;
+  const stats = ["S", "D", "C", "I", "W", "Ch", "AL", "LV"]
+    .map((stat) => (creature[stat] ? `${stat}: ${creature[stat]}` : null))
+    .filter(Boolean)
+    .join(", ");
+  if (stats) md += `\n**Stats:** ${wrapText(stats)}`;
+  return md.trim() + "\n";
+};
+
 function App() {
   const [items, setItems] = useState(() => {
     const saved = localStorage.getItem(LS_ITEMS_KEY);
@@ -59,9 +111,25 @@ function App() {
     return [DemoItem, emptyItem];
   });
 
+  const [creatures, setCreatures] = useState(() => {
+    const saved = localStorage.getItem(LS_CREATURES_KEY);
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch {
+        return [DemoNPC];
+      }
+    }
+    return [DemoNPC];
+  });
+
   useEffect(() => {
     localStorage.setItem(LS_ITEMS_KEY, JSON.stringify(items));
   }, [items]);
+
+  useEffect(() => {
+    localStorage.setItem(LS_CREATURES_KEY, JSON.stringify(creatures));
+  }, [creatures]);
 
   const handleItemChange = (idx, newItem) => {
     setItems((items) => items.map((item, i) => (i === idx ? newItem : item)));
@@ -71,13 +139,27 @@ function App() {
     setItems((items) => [...items, emptyItem]);
   };
 
+  const handleAddCreature = () => {
+    setCreatures((creatures) => [...creatures, emptyCreature]);
+  };
+
   const handleRemoveItem = (idx) => {
     const updatedItems = items.filter((_, i) => i !== idx);
     setItems(updatedItems);
   };
 
+  const handleRemoveCreature = (idx) => {
+    const updatedCreatures = creatures.filter((_, i) => i !== idx);
+    setCreatures(updatedCreatures);
+  };
+
   const handleCopyMarkdown = (idx) => {
     const md = itemToMarkdown(items[idx]);
+    navigator.clipboard.writeText(md);
+  };
+
+  const handleCopyCreatureMarkdown = (idx) => {
+    const md = creatureToMarkdown(creatures[idx]);
     navigator.clipboard.writeText(md);
   };
 
@@ -114,11 +196,54 @@ function App() {
           </button>
         </div>
       ))}
+      {creatures.map((creature, idx) => (
+        <div
+          key={`creature-${creature.name}-${idx}`}
+          style={{ position: "relative" }}
+        >
+          <CreatureBlock
+            creature={creature}
+            onChange={(newCreature) => {
+              setCreatures((prev) =>
+                prev.map((c, i) => (i === idx ? newCreature : c))
+              );
+            }}
+          />
+          <button
+            onClick={() => handleCopyCreatureMarkdown(idx)}
+            className="copy-markdown-btn"
+            title="Copy as Markdown"
+          >
+            <img
+              src={markdownIcon}
+              alt="Markdown"
+              style={{
+                width: "24px",
+                height: "24px",
+                filter: "invert(1) brightness(2)",
+              }}
+            />
+          </button>
+          <button
+            onClick={() => handleRemoveCreature(idx)}
+            className="remove-item-btn"
+            title="Remove Creature"
+          >
+            &times;
+          </button>
+        </div>
+      ))}
       <button
         onClick={handleAddItem}
         style={{ margin: "20px 0", padding: "8px 16px" }}
       >
         Add Item
+      </button>
+      <button
+        onClick={handleAddCreature}
+        style={{ margin: "20px 0", padding: "8px 16px" }}
+      >
+        Add Creature
       </button>
     </div>
   );

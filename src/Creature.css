@@ -1,0 +1,146 @@
+.creature-compact-row > .comma {
+  margin-right: 6px;
+  font-weight: normal;
+}
+/* Compact statblock row styles */
+.creature-compact-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 8px 0;
+  font-size: 1rem;
+}
+.creature-compact-field {
+  display: flex;
+  align-items: center;
+}
+.creature-compact-field b {
+  font-weight: bold;
+  margin-right: 4px;
+}
+.creature-compact-field .creature-ac,
+.creature-compact-field .creature-hp,
+.creature-compact-field .creature-attack,
+.creature-compact-field .creature-movement,
+.creature-compact-field .creature-stat {
+  padding: 2px 0px;
+  border-radius: 4px;
+  border: none;
+  font-size: 1rem;
+  outline: none;
+  background: transparent;
+  text-align: right;
+}
+/* Creature Card Styles - Based on Item Card */
+.creature-card {
+  background: #fff;
+  border: 2px solid #000;
+  border-radius: 8px;
+  max-width: 340px;
+  margin: 24px auto;
+  padding: 0 20px 14px 20px;
+  font-family: "Georgia", "Times New Roman", serif;
+  color: #000;
+}
+.creature-header {
+  background: #000;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  padding: 12px 20px 8px 20px;
+  margin: 0 -20px 10px -20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.creature-name {
+  font-size: 1.3rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #fff;
+  text-align: center;
+  width: 100%;
+  background: transparent;
+  border: none;
+}
+.creature-description {
+  margin-bottom: 10px;
+  font-style: italic;
+  width: 100%;
+  border-radius: 4px;
+  border: none;
+  padding: 6px;
+  outline: none;
+  text-align: left;
+}
+.creature-description:focus,
+.creature-description[contenteditable="true"]:focus {
+  border: 1px solid #7e57c2;
+  background: #f3f0ff;
+}
+.creature-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.creature-row label {
+  font-weight: bold;
+  margin-right: 2px;
+}
+.creature-ac,
+.creature-hp,
+.creature-attack,
+.creature-movement {
+  padding: 4px;
+  border-radius: 4px;
+  border: none;
+  font-size: 1rem;
+  outline: none;
+  background: transparent;
+}
+.creature-ac:focus,
+.creature-hp:focus,
+.creature-attack:focus,
+.creature-movement:focus,
+.creature-ac[contenteditable="true"]:focus,
+.creature-hp[contenteditable="true"]:focus,
+.creature-attack[contenteditable="true"]:focus,
+.creature-movement[contenteditable="true"]:focus {
+  border: 1px solid #7e57c2;
+  background: #f3f0ff;
+}
+.creature-stats {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0;
+  margin-top: 10px;
+}
+.creature-stat {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex: 1;
+  justify-content: flex-end;
+}
+.creature-stat label {
+  font-weight: bold;
+  margin-right: 2px;
+}
+.creature-stat span[contenteditable="true"] {
+  min-width: 32px;
+  display: inline-block;
+  border-radius: 4px;
+  border: none;
+  font-size: 1rem;
+  text-align: right;
+  outline: none;
+  background: transparent;
+  padding: 2px 0px;
+}
+.creature-stat span[contenteditable="true"]:focus {
+  border: none;
+  background: transparent;
+}
