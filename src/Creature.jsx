@@ -18,6 +18,20 @@ function CreatureBlock({ creature, onChange }) {
     AL: creature?.AL || "",
     LV: creature?.LV || "",
   });
+  const [feats, setFeats] = useState(creature?.feats || []);
+
+  const handleAddField = (fieldType) => {
+    if (fieldType === "feat") {
+      setFeats((prev) => [
+        ...prev,
+        {
+          id: Date.now(),
+          name: "feature name.",
+          description: "feature description.",
+        },
+      ]);
+    }
+  };
 
   const handleStatChange = (stat, value) => {
     setStats((prev) => {
@@ -154,6 +168,75 @@ function CreatureBlock({ creature, onChange }) {
             {i < statFields.length - 1 && <span className="comma">,</span>}
           </React.Fragment>
         ))}
+      </div>
+      {feats.length > 0 &&
+        feats.map((feat, idx) => (
+          <div className="creature-feat-section" key={feat.id || idx}>
+            <span
+              className="creature-feat-title"
+              style={{ cursor: "pointer" }}
+              contentEditable
+              suppressContentEditableWarning
+              onBlur={(e) => {
+                const newValue = e.target.innerText.trim();
+                let updatedFeats = feats.map((f, i) =>
+                  i === idx ? { ...f, name: newValue } : f
+                );
+                // Remove if both name and description are empty
+                updatedFeats = updatedFeats.filter(
+                  (f) => f.name.trim() !== "" || f.description.trim() !== ""
+                );
+                setFeats(updatedFeats);
+                if (onChange) onChange({ ...creature, feats: updatedFeats });
+              }}
+              tabIndex={0}
+            >
+              {feat.name}
+            </span>
+            <span
+              className="creature-feat-input"
+              style={{ cursor: "pointer" }}
+              contentEditable
+              suppressContentEditableWarning
+              onBlur={(e) => {
+                const newValue = e.target.innerText.trim();
+                let updatedFeats = feats.map((f, i) =>
+                  i === idx ? { ...f, description: newValue } : f
+                );
+                // Remove if both name and description are empty
+                updatedFeats = updatedFeats.filter(
+                  (f) => f.name.trim() !== "" || f.description.trim() !== ""
+                );
+                setFeats(updatedFeats);
+                if (onChange) onChange({ ...creature, feats: updatedFeats });
+              }}
+              tabIndex={0}
+            >
+              {feat.description}
+            </span>
+          </div>
+        ))}
+      <div
+        className="show-on-hover"
+        style={{ marginTop: "12px", textAlign: "center" }}
+      >
+        <button
+          className="card-add-btn"
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+          }}
+        >
+          +
+        </button>
+        <div>
+          <span
+            className="opt-field-option"
+            onClick={() => handleAddField("feat")}
+          >
+            Feature
+          </span>
+        </div>
       </div>
     </div>
   );

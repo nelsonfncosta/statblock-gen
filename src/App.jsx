@@ -42,6 +42,13 @@ const DemoNPC = {
   Ch: "-1",
   AL: "C",
   LV: "1",
+  feats: [
+    {
+      id: 1,
+      name: "Nimble.",
+      description: " Move up to near. 2/day",
+    },
+  ],
 };
 
 const emptyCreature = {
@@ -83,7 +90,7 @@ const itemToMarkdown = (item) => {
 
 const creatureToMarkdown = (creature) => {
   let md = `### ${wrapText(creature.name || "Creature Name")}`;
-  if (creature.description) md += `\n${wrapText(creature.description)}`;
+  if (creature.description) md += `\n${wrapText(creature.description)}  `;
   if (creature.armorClass)
     md += `\n**Armor Class:** ${wrapText(creature.armorClass)}`;
   if (creature.hitPoints)
@@ -95,6 +102,20 @@ const creatureToMarkdown = (creature) => {
     .filter(Boolean)
     .join(", ");
   if (stats) md += `\n**Stats:** ${wrapText(stats)}`;
+
+  if (creature.feats && creature.feats.length > 0) {
+    md += "  ";
+    creature.feats.forEach((feat, i) => {
+      if (
+        (feat.name && feat.name.trim()) ||
+        (feat.description && feat.description.trim())
+      ) {
+        md += `\n**${wrapText(feat.name || "Feat")}:** ${wrapText(
+          feat.description || ""
+        )}  `; // two spaces for soft break
+      }
+    });
+  }
   return md.trim() + "\n";
 };
 
