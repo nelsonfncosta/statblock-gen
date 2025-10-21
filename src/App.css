@@ -81,3 +81,13 @@
   outline: none;
   border: none;
 }
+
+/* WIP */
+
+@media print {
+  .encounter-name,
+  .scene-text {
+    color: #000 !important;
+    background: none !important;
+  }
+}

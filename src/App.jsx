@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import ItemBlock from "./Item";
 import CreatureBlock from "./Creature";
 import markdownIcon from "./assets/markdown.svg";
+import EscalatingEncounters from "./EscalatingEnc";
 
 const DemoItem = {
   name: "Dev Toolbox",
@@ -185,88 +186,98 @@ function App() {
   };
 
   return (
-    <div>
-      <h1>Items</h1>
-      {items.map((item, idx) => (
-        <div key={`item-${item.name}-${idx}`} style={{ position: "relative" }}>
-          <ItemBlock
-            item={item}
-            onChange={(newItem) => handleItemChange(idx, newItem)}
-          />
-          <button
-            onClick={() => handleCopyMarkdown(idx)}
-            className="copy-markdown-btn"
-            title="Copy as Markdown"
+    <>
+      <div>
+        <h1>Items</h1>
+        {items.map((item, idx) => (
+          <div
+            key={`item-${item.name}-${idx}`}
+            style={{ position: "relative" }}
           >
-            <img
-              src={markdownIcon}
-              alt="Markdown"
-              style={{
-                width: "24px",
-                height: "24px",
-                filter: "invert(1) brightness(2)",
+            <ItemBlock
+              item={item}
+              onChange={(newItem) => handleItemChange(idx, newItem)}
+            />
+            <button
+              onClick={() => handleCopyMarkdown(idx)}
+              className="copy-markdown-btn"
+              title="Copy as Markdown"
+            >
+              <img
+                src={markdownIcon}
+                alt="Markdown"
+                style={{
+                  width: "24px",
+                  height: "24px",
+                  filter: "invert(1) brightness(2)",
+                }}
+              />
+            </button>
+            <button
+              onClick={() => handleRemoveItem(idx)}
+              className="remove-item-btn"
+              title="Remove Item"
+            >
+              &times;
+            </button>
+          </div>
+        ))}
+        {creatures.map((creature, idx) => (
+          <div
+            key={`creature-${creature.name}-${idx}`}
+            style={{ position: "relative" }}
+          >
+            <CreatureBlock
+              creature={creature}
+              onChange={(newCreature) => {
+                setCreatures((prev) =>
+                  prev.map((c, i) => (i === idx ? newCreature : c))
+                );
               }}
             />
-          </button>
-          <button
-            onClick={() => handleRemoveItem(idx)}
-            className="remove-item-btn"
-            title="Remove Item"
-          >
-            &times;
-          </button>
-        </div>
-      ))}
-      {creatures.map((creature, idx) => (
-        <div
-          key={`creature-${creature.name}-${idx}`}
-          style={{ position: "relative" }}
+            <button
+              onClick={() => handleCopyCreatureMarkdown(idx)}
+              className="copy-markdown-btn"
+              title="Copy as Markdown"
+            >
+              <img
+                src={markdownIcon}
+                alt="Markdown"
+                style={{
+                  width: "24px",
+                  height: "24px",
+                  filter: "invert(1) brightness(2)",
+                }}
+              />
+            </button>
+            <button
+              onClick={() => handleRemoveCreature(idx)}
+              className="remove-item-btn"
+              title="Remove Creature"
+            >
+              &times;
+            </button>
+          </div>
+        ))}
+        <button
+          onClick={handleAddItem}
+          style={{ margin: "20px 0", padding: "8px 16px" }}
         >
-          <CreatureBlock
-            creature={creature}
-            onChange={(newCreature) => {
-              setCreatures((prev) =>
-                prev.map((c, i) => (i === idx ? newCreature : c))
-              );
-            }}
-          />
-          <button
-            onClick={() => handleCopyCreatureMarkdown(idx)}
-            className="copy-markdown-btn"
-            title="Copy as Markdown"
-          >
-            <img
-              src={markdownIcon}
-              alt="Markdown"
-              style={{
-                width: "24px",
-                height: "24px",
-                filter: "invert(1) brightness(2)",
-              }}
-            />
-          </button>
-          <button
-            onClick={() => handleRemoveCreature(idx)}
-            className="remove-item-btn"
-            title="Remove Creature"
-          >
-            &times;
-          </button>
-        </div>
-      ))}
-      <button
-        onClick={handleAddItem}
-        style={{ margin: "20px 0", padding: "8px 16px" }}
-      >
-        Add Item
-      </button>
-      <button
-        onClick={handleAddCreature}
-        style={{ margin: "20px 0", padding: "8px 16px" }}
-      >
-        Add Creature
-      </button>
-    </div>
+          Add Item
+        </button>
+        <button
+          onClick={handleAddCreature}
+          style={{ margin: "20px 0", padding: "8px 16px" }}
+        >
+          Add Creature
+        </button>
+      </div>
+      <div>
+        <h1>WIP</h1>
+        <hr style={{ pageBreakAfter: "always" }} />
+        <EscalatingEncounters />
+      </div>
+    </>
   );
 }
 
