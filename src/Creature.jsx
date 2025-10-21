@@ -1,3 +1,11 @@
+const selectAllOnFocus = (e) => {
+  const range = document.createRange();
+  range.selectNodeContents(e.target);
+  const sel = window.getSelection();
+  sel.removeAllRanges();
+  sel.addRange(range);
+};
+
 import React, { useState } from "react";
 import "./Creature.css";
 
@@ -91,6 +99,7 @@ function CreatureBlock({ creature, onChange }) {
               setArmorClass(newValue);
               if (onChange) onChange({ ...creature, armorClass: newValue });
             }}
+            onFocus={selectAllOnFocus}
             tabIndex={0}
           >
             {armorClass || <span style={{ color: "#888" }}>--</span>}
@@ -108,6 +117,7 @@ function CreatureBlock({ creature, onChange }) {
               setHitPoints(newValue);
               if (onChange) onChange({ ...creature, hitPoints: newValue });
             }}
+            onFocus={selectAllOnFocus}
             tabIndex={0}
           >
             {hitPoints || <span style={{ color: "#888" }}>--</span>}
@@ -125,6 +135,7 @@ function CreatureBlock({ creature, onChange }) {
               setAttack(newValue);
               if (onChange) onChange({ ...creature, attack: newValue });
             }}
+            onFocus={selectAllOnFocus}
             tabIndex={0}
           >
             {attack || <span style={{ color: "#888" }}>--</span>}
@@ -142,6 +153,7 @@ function CreatureBlock({ creature, onChange }) {
               setMovement(newValue);
               if (onChange) onChange({ ...creature, movement: newValue });
             }}
+            onFocus={selectAllOnFocus}
             tabIndex={0}
           >
             {movement || <span style={{ color: "#888" }}>--</span>}
@@ -160,6 +172,7 @@ function CreatureBlock({ creature, onChange }) {
                   const newValue = e.target.innerText;
                   handleStatChange(stat.key, newValue);
                 }}
+                onFocus={selectAllOnFocus}
                 tabIndex={0}
               >
                 {stats[stat.key] || <span style={{ color: "#888" }}>--</span>}
