@@ -112,7 +112,7 @@ const creatureToMarkdown = (creature) => {
         (feat.description && feat.description.trim())
       ) {
         md += `\n**${wrapText(feat.name || "Feat")}:** ${wrapText(
-          feat.description || ""
+          feat.description || "",
         )}  `; // two spaces for soft break
       }
     });
@@ -121,6 +121,8 @@ const creatureToMarkdown = (creature) => {
 };
 
 function App() {
+  const [activeScreen, setActiveScreen] = useState("statblocks");
+
   const [items, setItems] = useState(() => {
     const saved = localStorage.getItem(LS_ITEMS_KEY);
     if (saved) {
@@ -187,96 +189,123 @@ function App() {
 
   return (
     <>
-      <div>
-        <h1>Items</h1>
-        {items.map((item, idx) => (
-          <div
-            key={`item-${item.name}-${idx}`}
-            style={{ position: "relative" }}
-          >
-            <ItemBlock
-              item={item}
-              onChange={(newItem) => handleItemChange(idx, newItem)}
-            />
-            <button
-              onClick={() => handleCopyMarkdown(idx)}
-              className="copy-markdown-btn"
-              title="Copy as Markdown"
-            >
-              <img
-                src={markdownIcon}
-                alt="Markdown"
-                style={{
-                  width: "24px",
-                  height: "24px",
-                  filter: "invert(1) brightness(2)",
-                }}
-              />
-            </button>
-            <button
-              onClick={() => handleRemoveItem(idx)}
-              className="remove-item-btn"
-              title="Remove Item"
-            >
-              &times;
-            </button>
-          </div>
-        ))}
-        {creatures.map((creature, idx) => (
-          <div
-            key={`creature-${creature.name}-${idx}`}
-            style={{ position: "relative" }}
-          >
-            <CreatureBlock
-              creature={creature}
-              onChange={(newCreature) => {
-                setCreatures((prev) =>
-                  prev.map((c, i) => (i === idx ? newCreature : c))
-                );
-              }}
-            />
-            <button
-              onClick={() => handleCopyCreatureMarkdown(idx)}
-              className="copy-markdown-btn"
-              title="Copy as Markdown"
-            >
-              <img
-                src={markdownIcon}
-                alt="Markdown"
-                style={{
-                  width: "24px",
-                  height: "24px",
-                  filter: "invert(1) brightness(2)",
-                }}
-              />
-            </button>
-            <button
-              onClick={() => handleRemoveCreature(idx)}
-              className="remove-item-btn"
-              title="Remove Creature"
-            >
-              &times;
-            </button>
-          </div>
-        ))}
+      <nav className="app-nav" aria-label="Main navigation">
         <button
-          onClick={handleAddItem}
-          style={{ margin: "20px 0", padding: "8px 16px" }}
+          className={
+            activeScreen === "statblocks" ? "nav-btn active" : "nav-btn"
+          }
+          onClick={() => setActiveScreen("statblocks")}
         >
-          Add Item
+          Statblocks
         </button>
         <button
-          onClick={handleAddCreature}
-          style={{ margin: "20px 0", padding: "8px 16px" }}
+          className={
+            activeScreen === "encounters" ? "nav-btn active" : "nav-btn"
+          }
+          onClick={() => setActiveScreen("encounters")}
         >
-          Add Creature
+          Escalating Encounters
         </button>
-      </div>
-      <div>
-        <h1>WIP</h1>
-        <hr style={{ pageBreakAfter: "always" }} />
-        <EscalatingEncounters />
-      </div>
+      </nav>
+
+      {activeScreen === "statblocks" && (
+        <div className="statblock-layout">
+          <div className="statblock-grid">
+            {items.map((item, idx) => (
+              <div key={`item-${item.name}-${idx}`} className="statblock-card">
+                <div className="statblock-card-toolbar">
+                  <button
+                    onClick={() => handleCopyMarkdown(idx)}
+                    className="copy-markdown-btn"
+                    title="Copy as Markdown"
+                    aria-label="Copy item as Markdown"
+                  >
+                    <img
+                      src={markdownIcon}
+                      alt="Markdown"
+                      style={{
+                        width: "18px",
+                        height: "18px",
+                        filter: "invert(1) brightness(2)",
+                      }}
+                    />
+                  </button>
+                  <button
+                    onClick={() => handleRemoveItem(idx)}
+                    className="remove-item-btn"
+                    title="Remove Item"
+                    aria-label="Remove item"
+                  >
+                    &times;
+                  </button>
+                </div>
+                <ItemBlock
+                  item={item}
+                  onChange={(newItem) => handleItemChange(idx, newItem)}
+                />
+              </div>
+            ))}
+            {creatures.map((creature, idx) => (
+              <div
+                key={`creature-${creature.name}-${idx}`}
+                className="statblock-card"
+              >
+                <div className="statblock-card-toolbar">
+                  <button
+                    onClick={() => handleCopyCreatureMarkdown(idx)}
+                    className="copy-markdown-btn"
+                    title="Copy as Markdown"
+                    aria-label="Copy creature as Markdown"
+                  >
+                    <img
+                      src={markdownIcon}
+                      alt="Markdown"
+                      style={{
+                        width: "18px",
+                        height: "18px",
+                        filter: "invert(1) brightness(2)",
+                      }}
+                    />
+                  </button>
+                  <button
+                    onClick={() => handleRemoveCreature(idx)}
+                    className="remove-item-btn"
+                    title="Remove Creature"
+                    aria-label="Remove creature"
+                  >
+                    &times;
+                  </button>
+                </div>
+                <CreatureBlock
+                  creature={creature}
+                  onChange={(newCreature) => {
+                    setCreatures((prev) =>
+                      prev.map((c, i) => (i === idx ? newCreature : c)),
+                    );
+                  }}
+                />
+              </div>
+            ))}
+          </div>
+
+          <div className="statblock-actions">
+            <button
+              onClick={handleAddItem}
+              style={{ margin: "20px 0", padding: "8px 16px" }}
+            >
+              Add Item
+            </button>
+            <button
+              onClick={handleAddCreature}
+              style={{ margin: "20px 0", padding: "8px 16px" }}
+            >
+              Add Creature
+            </button>
+          </div>
+        </div>
+      )}
+
+      {activeScreen === "encounters" && <EscalatingEncounters />}
     </>
   );
 }

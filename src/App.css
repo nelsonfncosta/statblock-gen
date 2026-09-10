@@ -1,8 +1,149 @@
 #root {
-  max-width: 1280px;
+  width: 100%;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 2rem 0;
   text-align: center;
+  box-sizing: border-box;
+}
+
+.app-nav {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  margin: 0 auto 1.5rem;
+  padding: 0.5rem;
+  width: fit-content;
+  border: 2px solid #000;
+  border-radius: 999px;
+  background: rgba(17, 17, 17, 0.96);
+}
+
+.nav-btn {
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  color: #fff;
+  padding: 0.6rem 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.nav-btn.active {
+  background: #fff;
+  color: #111;
+  border-color: #fff;
+}
+
+.statblock-layout {
+  width: 100%;
+}
+
+.statblock-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  align-items: start;
+  width: 100%;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.statblock-card {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  min-width: 0;
+  padding-top: 8px;
+}
+
+.statblock-card > *:not(.statblock-card-toolbar) {
+  width: 100%;
+  max-width: 320px;
+}
+
+.statblock-card-toolbar {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(100%, 320px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.copy-markdown-btn,
+.remove-item-btn {
+  position: static;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  margin: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.8);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+  cursor: pointer;
+  pointer-events: auto;
+  outline: none;
+}
+
+.copy-markdown-btn {
+  right: auto;
+}
+
+.remove-item-btn {
+  left: auto;
+  color: #fff;
+  font-weight: bold;
+  font-size: 1.45rem;
+  line-height: 1;
+}
+
+.copy-markdown-btn img {
+  display: block;
+  width: 18px;
+  height: 18px;
+}
+
+.copy-markdown-btn:focus,
+.remove-item-btn:focus {
+  outline: none;
+  border: none;
+}
+
+.statblock-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.encounter-intro {
+  max-width: 760px;
+  margin: 0 auto 1.5rem;
+  text-align: left;
+}
+
+.encounter-intro h1 {
+  margin: 0 0 0.5rem;
+  font-size: 1.7rem;
+}
+
+.encounter-intro p {
+  margin: 0;
+  color: #ccc;
+  line-height: 1.5;
 }
 
 .logo {
@@ -41,50 +182,59 @@
   color: #888;
 }
 
-/* Copy Markdown Button Styles */
-.copy-markdown-btn {
-  position: absolute;
-  top: 0px;
-  right: -38px;
-  z-index: 2;
-  padding: 0px 10px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  border-radius: 50%;
-  outline: none;
-}
-.copy-markdown-btn:focus {
-  outline: none;
-  border: none;
-}
-
-.remove-item-btn {
-  position: absolute;
-  top: 0px;
-  left: -38px;
-  z-index: 2;
-  padding: 0px 10px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  border-radius: 50%;
-  color: rgb(255, 255, 255);
-  font-weight: bold;
-  font-size: 1.5rem;
-  outline: none;
-}
-
-.remove-item-btn:focus {
-  outline: none;
-  border: none;
-}
-
 /* WIP */
 
 @media print {
+  :root {
+    --print-page-width: 210mm;
+    --print-page-padding: 8mm;
+    --print-card-width: 58mm;
+  }
+
+  #root {
+    max-width: none;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+  }
+
+  .app-nav,
+  .statblock-actions,
+  .statblock-card-toolbar,
+  .copy-markdown-btn,
+  .remove-item-btn {
+    display: none !important;
+  }
+
+  .statblock-layout,
+  .statblock-grid {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .statblock-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 4mm;
+    align-items: start;
+    width: calc(var(--print-page-width) - (var(--print-page-padding) * 2));
+    margin: 0 auto;
+  }
+
+  .statblock-card {
+    width: 100%;
+    padding-top: 0;
+    margin: 0;
+  }
+
+  .statblock-card > *:not(.statblock-card-toolbar) {
+    width: 100%;
+    max-width: var(--print-card-width);
+    min-width: 0;
+  }
+
   .encounter-name,
   .scene-text {
     color: #000 !important;

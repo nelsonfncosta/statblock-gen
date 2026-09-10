@@ -54,8 +54,23 @@ const encounters = [
   { name: "The Count (p.39)", table: countEncounters },
 ];
 
+const LS_ENCOUNTERS_KEY = "statblock-gen-encounters";
+
 function EscalatingEncounters() {
-  const [sceneList, setSceneList] = useState([]);
+  const [sceneList, setSceneList] = useState(() => {
+    const saved = localStorage.getItem(LS_ENCOUNTERS_KEY);
+    if (!saved) return [];
+
+    try {
+      return JSON.parse(saved);
+    } catch {
+      return [];
+    }
+  });
+
+  React.useEffect(() => {
+    localStorage.setItem(LS_ENCOUNTERS_KEY, JSON.stringify(sceneList));
+  }, [sceneList]);
 
   const handleGenerate = () => {
     const count = 24; // 6 encounters x 4 scenes each
@@ -80,7 +95,7 @@ function EscalatingEncounters() {
       // Remove encounter if all scenes have been shown
       if (newSceneCounts[encounter.name] >= encounter.table.length) {
         availableEncounters = availableEncounters.filter(
-          (e) => e.name !== encounter.name
+          (e) => e.name !== encounter.name,
         );
       }
     }
@@ -89,6 +104,19 @@ function EscalatingEncounters() {
 
   return (
     <div style={{ margin: "24px" }}>
+      <div className="encounter-intro">
+        <p>
+          For{" "}
+          <strong>
+            <em>The Count, the Castle, &amp; the Curse</em>
+          </strong>{" "}
+          by Deficient Master, roll for an encounter when the party enters an
+          <strong> unexplored room</strong> or makes{" "}
+          <strong>considerable noise</strong>. There is a{" "}
+          <strong>2-in-6 chance</strong> of an encounter. When one occurs,
+          follow the generated list from top to bottom in order.
+        </p>
+      </div>
       <button
         onClick={handleGenerate}
         style={{ padding: "8px 16px", fontSize: "1.1rem" }}
