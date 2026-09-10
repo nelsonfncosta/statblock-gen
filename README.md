@@ -1,18 +1,47 @@
-# React + Vite
+# Statblock Generator
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A browser-based tool for creating tabletop RPG items and creature statblocks, with printable layouts, Markdown export, and an escalating encounter generator.
 
-Currently, two official plugins are available:
+<p>
+	<a href="https://ko-fi.com/nelsoncosta">
+		<img src="https://nelsonfncosta.github.io/statblock-gen/coffee.svg" width="24" height="24" alt="Support the project on Ko-fi" />
+	</a>
+	<a href="https://ko-fi.com/nelsoncosta">Pour me a coffee</a>
+	&nbsp;&nbsp;
+	<a href="https://github.com/nelsonfncosta/statblock-gen/issues">
+		<img src="https://nelsonfncosta.github.io/statblock-gen/bug.svg" width="24" height="24" alt="Report a bug or request a feature" />
+	</a>
+	<a href="https://github.com/nelsonfncosta/statblock-gen/issues">Bugs and feature requests</a>
+</p>
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Use the app
 
-## React Compiler
+Open the deployed app at [nelsonfncosta.github.io/statblock-gen](https://nelsonfncosta.github.io/statblock-gen/).
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+The generator supports:
 
-Note: This will impact Vite dev & build performances.
+- Create and edit item statblocks with bonuses, benefits, curses, and personality traits.
+- Create and edit creature statblocks with attributes, attacks, movement, and feats.
+- Copy items and creatures as formatted Markdown.
+- Print statblocks in a compact three-column desktop layout.
+- Generate and persist ordered escalating encounters for _The Count, the Castle, & the Curse_ by Deficient Master.
+- Save statblocks and encounter results locally in the browser.
 
-## Expanding the ESLint configuration
+## Development
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+This project uses React and Vite.
+
+```bash
+npm install
+npm run dev
+```
+
+Create a production build with:
+
+```bash
+npm run build
+```
+
+## License
+
+See [LICENSE](LICENSE) for the project license.
