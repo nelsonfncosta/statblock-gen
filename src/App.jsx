@@ -190,22 +190,45 @@ function App() {
   return (
     <>
       <nav className="app-nav" aria-label="Main navigation">
-        <button
-          className={
-            activeScreen === "statblocks" ? "nav-btn active" : "nav-btn"
-          }
-          onClick={() => setActiveScreen("statblocks")}
-        >
-          Statblocks
-        </button>
-        <button
-          className={
-            activeScreen === "encounters" ? "nav-btn active" : "nav-btn"
-          }
-          onClick={() => setActiveScreen("encounters")}
-        >
-          Escalating Encounters
-        </button>
+        <div className="app-nav-main">
+          <button
+            className={
+              activeScreen === "statblocks" ? "nav-btn active" : "nav-btn"
+            }
+            onClick={() => setActiveScreen("statblocks")}
+          >
+            Statblocks
+          </button>
+          <button
+            className={
+              activeScreen === "encounters" ? "nav-btn active" : "nav-btn"
+            }
+            onClick={() => setActiveScreen("encounters")}
+          >
+            Escalating Encounters
+          </button>
+        </div>
+
+        <div className="app-nav-links" aria-label="Project links">
+          <a
+            href="https://ko-fi.com/nelsoncosta"
+            target="_blank"
+            rel="noreferrer"
+            title="Support the project on Ko-fi"
+          >
+            <img src="/statblock-gen/coffee.svg" alt="" />
+            Support
+          </a>
+          <a
+            href="https://github.com/nelsonfncosta/statblock-gen/issues"
+            target="_blank"
+            rel="noreferrer"
+            title="Report a bug or request a feature"
+          >
+            <img src="/statblock-gen/bug.svg" alt="" />
+            Issues
+          </a>
+        </div>
       </nav>
 
       {activeScreen === "statblocks" && (

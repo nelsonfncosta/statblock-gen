@@ -10,14 +10,23 @@
 .app-nav {
   position: relative;
   display: flex;
-  justify-content: center;
-  gap: 0.75rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
   margin: 0 auto 1.5rem;
   padding: 0.5rem;
-  width: fit-content;
+  width: calc(100% - 2rem);
+  max-width: 1080px;
   border: 2px solid #000;
   border-radius: 999px;
   background: rgba(17, 17, 17, 0.96);
+}
+
+.app-nav-main,
+.app-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .nav-btn {
@@ -35,6 +44,26 @@
   background: #fff;
   color: #111;
   border-color: #fff;
+}
+
+.app-nav-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.6rem 0.7rem;
+  color: #aaa;
+  font-size: 0.85rem;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.app-nav-links a:hover {
+  color: #fff;
+}
+
+.app-nav-links img {
+  width: 17px;
+  height: 17px;
 }
 
 .statblock-layout {
@@ -180,6 +209,24 @@
 
 .read-the-docs {
   color: #888;
+}
+
+@media (max-width: 700px) {
+  .statblock-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .app-nav {
+    border-radius: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .app-nav-main,
+  .app-nav-links {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
 }
 
 /* WIP */
