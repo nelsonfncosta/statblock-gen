@@ -225,7 +225,11 @@ function App() {
             rel="noreferrer"
             title="Report a bug or request a feature"
           >
-            <img src="/statblock-gen/bug.svg" alt="" />
+            <img
+              src="/statblock-gen/bug.svg"
+              alt=""
+              style={{ filter: "invert(1)" }}
+            />
             Issues
           </a>
         </div>
