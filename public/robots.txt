@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://nelsonfncosta.github.io/statblock-gen/sitemap.xml
